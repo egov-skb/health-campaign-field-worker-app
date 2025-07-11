@@ -23,8 +23,12 @@ mixin _$BandwidthModel {
   String get userId => throw _privateConstructorUsedError;
   int get batchSize => throw _privateConstructorUsedError;
 
+  /// Serializes this BandwidthModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of BandwidthModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BandwidthModelCopyWith<BandwidthModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$BandwidthModelCopyWithImpl<$Res, $Val extends BandwidthModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BandwidthModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$BandwidthModelImplCopyWithImpl<$Res>
       _$BandwidthModelImpl _value, $Res Function(_$BandwidthModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BandwidthModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -133,11 +141,13 @@ class _$BandwidthModelImpl implements _BandwidthModel {
                 other.batchSize == batchSize));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, userId, batchSize);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BandwidthModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BandwidthModelImplCopyWith<_$BandwidthModelImpl> get copyWith =>
@@ -164,8 +174,11 @@ abstract class _BandwidthModel implements BandwidthModel {
   String get userId;
   @override
   int get batchSize;
+
+  /// Create a copy of BandwidthModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BandwidthModelImplCopyWith<_$BandwidthModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

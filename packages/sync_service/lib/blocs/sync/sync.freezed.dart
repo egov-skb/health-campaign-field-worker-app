@@ -89,6 +89,9 @@ class _$SyncEventCopyWithImpl<$Res, $Val extends SyncEvent>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of SyncEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -108,6 +111,8 @@ class __$$SyncRefreshEventImplCopyWithImpl<$Res>
       $Res Function(_$SyncRefreshEventImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SyncEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -155,7 +160,9 @@ class _$SyncRefreshEventImpl implements SyncRefreshEvent {
   @override
   int get hashCode => Object.hash(runtimeType, createdBy, count);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SyncEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SyncRefreshEventImplCopyWith<_$SyncRefreshEventImpl> get copyWith =>
@@ -249,7 +256,10 @@ abstract class SyncRefreshEvent implements SyncEvent {
 
   String get createdBy;
   int? get count;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SyncEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SyncRefreshEventImplCopyWith<_$SyncRefreshEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -275,6 +285,8 @@ class __$$SyncSyncUpEventImplCopyWithImpl<$Res>
       _$SyncSyncUpEventImpl _value, $Res Function(_$SyncSyncUpEventImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SyncEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -358,7 +370,9 @@ class _$SyncSyncUpEventImpl implements SyncSyncUpEvent {
       const DeepCollectionEquality().hash(_localRepositories),
       const DeepCollectionEquality().hash(_remoteRepositories));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SyncEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SyncSyncUpEventImplCopyWith<_$SyncSyncUpEventImpl> get copyWith =>
@@ -457,7 +471,10 @@ abstract class SyncSyncUpEvent implements SyncEvent {
   String get userId;
   List<LocalRepository<EntityModel, EntitySearchModel>> get localRepositories;
   List<RemoteRepository<EntityModel, EntitySearchModel>> get remoteRepositories;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SyncEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SyncSyncUpEventImplCopyWith<_$SyncSyncUpEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -549,6 +566,9 @@ class _$SyncStateCopyWithImpl<$Res, $Val extends SyncState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -565,6 +585,9 @@ class __$$SyncLoadingStateImplCopyWithImpl<$Res>
   __$$SyncLoadingStateImplCopyWithImpl(_$SyncLoadingStateImpl _value,
       $Res Function(_$SyncLoadingStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -697,6 +720,9 @@ class __$$SyncInProgressStateImplCopyWithImpl<$Res>
   __$$SyncInProgressStateImplCopyWithImpl(_$SyncInProgressStateImpl _value,
       $Res Function(_$SyncInProgressStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -833,6 +859,8 @@ class __$$SyncPendingStateImplCopyWithImpl<$Res>
       $Res Function(_$SyncPendingStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -872,7 +900,9 @@ class _$SyncPendingStateImpl implements SyncPendingState {
   @override
   int get hashCode => Object.hash(runtimeType, count);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SyncPendingStateImplCopyWith<_$SyncPendingStateImpl> get copyWith =>
@@ -976,7 +1006,10 @@ abstract class SyncPendingState implements SyncState {
   const factory SyncPendingState({final int count}) = _$SyncPendingStateImpl;
 
   int get count;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SyncPendingStateImplCopyWith<_$SyncPendingStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -995,6 +1028,9 @@ class __$$SyncCompletedStateImplCopyWithImpl<$Res>
   __$$SyncCompletedStateImplCopyWithImpl(_$SyncCompletedStateImpl _value,
       $Res Function(_$SyncCompletedStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1127,6 +1163,9 @@ class __$$SyncFailedStateImplCopyWithImpl<$Res>
   __$$SyncFailedStateImplCopyWithImpl(
       _$SyncFailedStateImpl _value, $Res Function(_$SyncFailedStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1259,6 +1298,9 @@ class __$$DownSyncFailedStateImplCopyWithImpl<$Res>
   __$$DownSyncFailedStateImplCopyWithImpl(_$DownSyncFailedStateImpl _value,
       $Res Function(_$DownSyncFailedStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1392,6 +1434,9 @@ class __$$UpSyncFailedStateImplCopyWithImpl<$Res>
   __$$UpSyncFailedStateImplCopyWithImpl(_$UpSyncFailedStateImpl _value,
       $Res Function(_$UpSyncFailedStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of SyncState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
