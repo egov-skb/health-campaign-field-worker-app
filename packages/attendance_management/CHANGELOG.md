@@ -1,3 +1,7 @@
+## 1.0.5+5
+
+* Added filter for attendees based on enrollment and de-enrollment dates
+
 ## 1.0.5+1
 
 * Accommodated single sessions for registers
