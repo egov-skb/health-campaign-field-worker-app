@@ -133,6 +133,7 @@ abstract class OpLogManager<T extends EntityModel> {
         .sortedBy((element) => element.createdAt)
         .where(
           (element) =>
+              element.entityType != DataModelType.service &&
               element.entityType != DataModelType.userLocation &&
               element.entityType != DataModelType.userAction &&
               element.entityType != DataModelType.complaints,
