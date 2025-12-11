@@ -42373,6 +42373,9 @@ abstract class _$LocalSqlDataStore extends GeneratedDatabase {
   late final Index householdmemberIndividualid = Index(
       'householdmember_individualid',
       'CREATE INDEX householdmember_individualid ON household_member (individual_client_reference_id)');
+  late final Index householdmemberrelationshipSelfclientref = Index(
+      'householdmemberrelationship_selfclientref',
+      'CREATE INDEX householdmemberrelationship_selfclientref ON household_member_relation_ship (self_client_reference_id)');
   late final Index taskClinetref = Index('task_clinetref',
       'CREATE INDEX task_clinetref ON task (client_reference_id)');
   late final Index taskProjectid = Index(
@@ -42470,6 +42473,7 @@ abstract class _$LocalSqlDataStore extends GeneratedDatabase {
         householdmemberClinetref,
         householdClientref,
         householdmemberIndividualid,
+        householdmemberrelationshipSelfclientref,
         taskClinetref,
         taskProjectid,
         taskProjectbeneficiaryid,
