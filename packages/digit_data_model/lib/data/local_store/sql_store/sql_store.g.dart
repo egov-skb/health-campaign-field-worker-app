@@ -42342,6 +42342,12 @@ abstract class _$LocalSqlDataStore extends GeneratedDatabase {
       'CREATE INDEX attendance_clientref ON attendance (client_reference_id)');
   late final Index attendanceIndividualid = Index('attendance_individualid',
       'CREATE INDEX attendance_individualid ON attendance (individual_id)');
+  late final Index addressLatitude = Index('address_latitude',
+      'CREATE INDEX address_latitude ON address (latitude)');
+  late final Index addressLongitude = Index('address_longitude',
+      'CREATE INDEX address_longitude ON address (longitude)');
+  late final Index addressRelatedClientRef = Index('address_related_client_ref',
+      'CREATE INDEX address_related_client_ref ON address (related_client_reference_id)');
   late final Index projectClinetref = Index('project_clinetref',
       'CREATE INDEX project_clinetref ON project_beneficiary (client_reference_id)');
   late final Index projectProjectid = Index('project_projectid',
@@ -42459,6 +42465,9 @@ abstract class _$LocalSqlDataStore extends GeneratedDatabase {
         uniqueIdPool,
         attendanceClientref,
         attendanceIndividualid,
+        addressLatitude,
+        addressLongitude,
+        addressRelatedClientRef,
         projectClinetref,
         projectProjectid,
         projectProjectbeneficiaryclientref,
