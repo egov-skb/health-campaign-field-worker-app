@@ -4,8 +4,8 @@ import 'package:drift/drift.dart';
 
 import '../../../../../models/entities/household_type.dart';
 
-@TableIndex(name: 'household_selfclientref', columns: {
-  #selfClientReferenceId,
+@TableIndex(name: 'household_clinetref', columns: {
+  #clientReferenceId,
 })
 class Household extends Table {
   TextColumn get id => text().nullable()();
