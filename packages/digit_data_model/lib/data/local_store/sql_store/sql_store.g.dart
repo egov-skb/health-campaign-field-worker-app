@@ -42372,6 +42372,8 @@ abstract class _$LocalSqlDataStore extends GeneratedDatabase {
       'CREATE INDEX hfreferral_clientref ON h_f_referral (client_reference_id)');
   late final Index hfreferralProjectid = Index('hfreferral_projectid',
       'CREATE INDEX hfreferral_projectid ON h_f_referral (project_id)');
+  late final Index householdSelfclientref = Index('household_selfclientref',
+      'CREATE INDEX household_selfclientref ON household ()');
   late final Index householdmemberClinetref = Index('householdmember_clinetref',
       'CREATE INDEX householdmember_clinetref ON household_member (client_reference_id)');
   late final Index householdClientref = Index('household_clientref',
@@ -42479,6 +42481,7 @@ abstract class _$LocalSqlDataStore extends GeneratedDatabase {
         stockreconProductvariantid,
         hfreferralClientref,
         hfreferralProjectid,
+        householdSelfclientref,
         householdmemberClinetref,
         householdClientref,
         householdmemberIndividualid,
