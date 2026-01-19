@@ -85,6 +85,42 @@ class _JsonFormBuilderState extends LocalizedState<JsonFormBuilder> {
     }
   }
 
+  bool hasMatchValueValidation(
+      FormGroup form, List<ValidationRule>? validations) {
+    if (validations == null) return false;
+
+    List matchFieldValues = validations
+        .firstWhereOrNull((rule) => rule.type == 'matchValue')
+        ?.value;
+
+    if (matchFieldValues == null || matchFieldValues.isEmpty) return false;
+
+    String? firstFieldValue =
+        matchFieldValues.length >= 1 ? matchFieldValues[0] : null;
+    List<String> secondFiledValues =
+        matchFieldValues.length > 1 ? matchFieldValues[1].split(".") : [];
+
+    var firstValue =
+        (firstFieldValue != null) ? form.control(firstFieldValue).value : null;
+    var secondValue = (secondFiledValues.length > 1 &&
+            form.control(secondFiledValues[0]).value != null)
+        ? form.control(secondFiledValues[0]).value.first[secondFiledValues[1]]
+        : null;
+
+    if (firstValue == null || secondValue == null) return false;
+    bool isValidate = firstValue != secondValue;
+    if (isValidate) {
+      form
+          .control(widget.formControlName)
+          .setValidators([Validators.required], autoValidate: true);
+    } else {
+      form
+          .control(widget.formControlName)
+          .setValidators([], autoValidate: true);
+    }
+    return isValidate;
+  }
+
   /// Handle `string` type formats
   Widget _buildStringType(FormGroup form) {
     final format = widget.schema.format;
@@ -121,7 +157,8 @@ class _JsonFormBuilderState extends LocalizedState<JsonFormBuilder> {
       case PropertySchemaFormat.dropdown:
         return JsonSchemaDropdownBuilder(
           tooltipText: translateIfPresent(widget.schema.tooltip, localizations),
-          isRequired: hasRequiredValidation(widget.schema.validations),
+          isRequired: hasRequiredValidation(widget.schema.validations) ||
+              hasMatchValueValidation(form, widget.schema.validations),
           label: translateIfPresent(widget.schema.label, localizations),
           form: form,
           formControlName: widget.formControlName,
