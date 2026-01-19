@@ -20,7 +20,7 @@ extension GS1Display on GS1Barcode {
     for (final k in prefer) {
       final el = elements[k];
       final v = el?.data?.toString().trim();
-      allGS1Code += (allGS1Code != "" && v != null) ? "." : "";
+      allGS1Code += (allGS1Code != "" && v != null) ? "|" : "";
       allGS1Code += v != null ? "($k)$v" : "";
       // if (v != null && v.isNotEmpty) return v;
     }
@@ -141,7 +141,7 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
         }();
 
         final List<String> targetItems = items.map((e) {
-          List<String> codes = e.split('.');
+          List<String> codes = e.split('|');
           for (var code in codes) {
             if (code.contains(applicationIdentifier)) {
               return code.substring(applicationIdentifier.length + 2);
