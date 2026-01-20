@@ -187,33 +187,42 @@ class _LatLngBuilderStatefulWrapperState
                 label: widget.label,
                 isRequired: widget.isRequired ?? false,
                 capitalizedFirstLetter: false,
-                child: Stack(
-                  children: [
-                    BaseDigitFormInput(
-                      helpText: widget.helpText,
-                      readOnly: true,
-                      initialValue: displayText,
-                      textStyle: textColor != null
-                          ? TextStyle(color: textColor)
-                          : null,
-                      onChange: (value) {},
-                      errorMessage: field.errorText,
-                    ),
+                child: InkWell(
+                  onTap: () {
                     if (_accuracy != null && _accuracy! > 5)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        bottom: 40,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.refresh,
-                            color: theme.colorTheme.primary.primary1,
-                          ),
-                          onPressed: _retryLocationFetch,
-                          tooltip: 'Retry',
+                      _retryLocationFetch();
+                  },
+                  child: IgnorePointer(
+                    ignoring: true,
+                    child: Stack(
+                      children: [
+                        BaseDigitFormInput(
+                          helpText: widget.helpText,
+                          readOnly: true,
+                          initialValue: displayText,
+                          textStyle: textColor != null
+                              ? TextStyle(color: textColor)
+                              : null,
+                          onChange: (value) {},
+                          errorMessage: field.errorText,
                         ),
-                      ),
-                  ],
+                        if (_accuracy != null && _accuracy! > 5)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            bottom: 40,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.refresh,
+                                color: theme.colorTheme.primary.primary1,
+                              ),
+                              onPressed: _retryLocationFetch,
+                              tooltip: 'Retry',
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             );
