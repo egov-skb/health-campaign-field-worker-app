@@ -173,6 +173,106 @@ class _FormsRenderPageState extends LocalizedState<FormsRenderPage> {
                             schema,
                           );
 
+                          if (widget.pageName == "beneficiaryLocation") {
+                            String? accuracyString =
+                                values['latLng'].split(',')[2];
+                            double? accuracy;
+                            try {
+                              accuracy = accuracyString == null
+                                  ? null
+                                  : double.parse(accuracyString);
+                            } catch (e) {
+                              accuracy = null;
+                            }
+                            if (accuracy != null && accuracy! > 5) {
+                              bool accuracyDialogResult = await showCustomPopup(
+                                context: context,
+                                builder: (BuildContext ctx) => Popup(
+                                    title: localizations.translate(
+                                        "BENEFICIARY_LOCATION_ACCURACY_ALERT_TITLE"),
+                                    description: localizations.translate(
+                                        "BENEFICIARY_LOCATION_ACCURACY_ALERT_DESCRIPTION"),
+                                    actions: [
+                                      DigitButton(
+                                          label: localizations.translate(
+                                              "BENEFICIARY_LOCATION_ACCURACY_ALERT_PROCEED_LABEL"),
+                                          onPressed: () async {
+                                            Navigator.of(
+                                              ctx,
+                                              rootNavigator: true,
+                                            ).pop(true);
+                                          },
+                                          type: DigitButtonType.primary,
+                                          size: DigitButtonSize.large),
+                                      DigitButton(
+                                          label: localizations.translate(
+                                              "BENEFICIARY_LOCATION_ACCURACY_ALERT_CANCEL_LABEL"),
+                                          onPressed: () {
+                                            Navigator.of(
+                                              ctx,
+                                              rootNavigator: true,
+                                            ).pop(false);
+                                          },
+                                          type: DigitButtonType.secondary,
+                                          size: DigitButtonSize.large)
+                                    ]),
+                              ) as bool;
+                              if (accuracyDialogResult == false) {
+                                _isSubmitting = false;
+                                setState(() {});
+                                return;
+                              }
+                              ;
+                            }
+                          }
+                          if (widget.pageName == "beneficiaryDetails") {
+                            values["nameOfIndividual"] =
+                                "${values["nameOfIndividual"]} ${values["familyNameOfIndividual"]}";
+                          }
+                          if (widget.pageName == "DeliveryDetails") {
+                            values["resourceCard"] = {
+                              "resourceDelivered": values["resourceCard"]
+                                  .first["resourceDelivered"],
+                              "quantityDistributed":
+                                  values["actualQuantityDelivered"]
+                            };
+                            int numberOfBalesScanned = 0;
+                            var scanner = values["scanner"];
+                            if (scanner != null) {
+                              List<String> balesScanned = scanner.split(',');
+                              numberOfBalesScanned = balesScanned.length;
+                            }
+                            if (numberOfBalesScanned <
+                                values["actualQuantityDelivered"]) {
+                              // Show error if number of scanned bales is less than actual quantity delivered
+                              showCustomPopup(
+                                context: context,
+                                builder: (BuildContext ctx) => Popup(
+                                    title: localizations.translate(
+                                        "DELIVERY_DETAILS_SCANNER_QUANTITY_ERROR_TITLE"),
+                                    description: localizations.translate(
+                                        "DELIVERY_DETAILS_SCANNER_QUANTITY_ERROR_DESCRIPTION"),
+                                    actions: [
+                                      DigitButton(
+                                        label: localizations
+                                            .translate("CORE_COMMON_OK"),
+                                        onPressed: () async {
+                                          Navigator.of(
+                                            ctx,
+                                            rootNavigator: true,
+                                          ).pop();
+                                        },
+                                        type: DigitButtonType.primary,
+                                        size: DigitButtonSize.large,
+                                      ),
+                                    ]),
+                              );
+                              _isSubmitting = false;
+                              setState(() {});
+                              return;
+                            }
+                          }
+
                           final updatedPropertySchema = schema.copyWith(
                             properties: Map.fromEntries(
                               schema.properties?.entries.map(
