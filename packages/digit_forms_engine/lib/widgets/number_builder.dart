@@ -58,6 +58,45 @@ class JsonSchemaNumberBuilder extends JsonSchemaBuilder<int> {
                   return;
                 }
                 form.control(formControlName).value = int.parse(value);
+                String? maxDependencyField = validations
+                    ?.firstWhereOrNull((v) => v.type == 'maxDependencyField')
+                    ?.value
+                    ?.toString();
+                String? maxDependencyMessage = validations
+                    ?.firstWhereOrNull((v) => v.type == 'maxDependencyField')
+                    ?.message
+                    ?.toString();
+                int maxDependencyValue = 0;
+
+                // Build context from current form values
+                final formContext = _buildFormContext(form);
+                if (maxDependencyField is String &&
+                    maxDependencyField.contains('{{')) {
+                  final resolvedValue = resolveTemplateVariables(
+                    maxDependencyField,
+                    formValues: formContext,
+                  );
+
+                  maxDependencyValue = int.tryParse(resolvedValue) ?? 0;
+                }
+                if (int.parse(value) > maxDependencyValue) {
+                  form.control(formControlName).setValidators(
+                      [Validators.max(maxDependencyValue)],
+                      autoValidate: true);
+                  Toast.showToast(
+                    context,
+                    type: ToastType.error,
+                    message: loc.translate(
+                      maxDependencyMessage ??
+                          "Value should not exceed $maxDependencyValue",
+                    ),
+                  );
+                } else {
+                  form
+                      .control(formControlName)
+                      .setValidators([], autoValidate: true);
+                }
+                form.control(formControlName).markAsTouched();
                 if (getMinLength(validations) != null &&
                     value.length < getMinLength(validations)!) {
                   form.control(formControlName).setErrors({'minLength': true});
