@@ -85,6 +85,18 @@ class _JsonFormBuilderState extends LocalizedState<JsonFormBuilder> {
     }
   }
 
+  int? resolveTemplateVariablesInt(String firstFieldValue,
+      {required FormGroup form}) {
+    // Build context from current form values
+    final formContext = _buildFormContext(form);
+    String? resolveValue = resolveTemplateVariables(
+      firstFieldValue,
+      formValues: formContext,
+    );
+    if (resolveValue == null) return null;
+    return int.tryParse(resolveValue);
+  }
+
   bool hasMatchValueValidation(
       FormGroup form, List<ValidationRule>? validations) {
     if (validations == null) return false;
@@ -93,19 +105,21 @@ class _JsonFormBuilderState extends LocalizedState<JsonFormBuilder> {
         .firstWhereOrNull((rule) => rule.type == 'matchValue')
         ?.value;
 
-    if (matchFieldValues == null || matchFieldValues.isEmpty) return false;
+    if (matchFieldValues == null) return false;
 
-    String? firstFieldValue =
-        matchFieldValues.length >= 1 ? matchFieldValues[0] : null;
-    List<String> secondFiledValues =
-        matchFieldValues.length > 1 ? matchFieldValues[1].split(".") : [];
+    if (matchFieldValues.length < 2) return false;
+
+    String firstFieldValue = matchFieldValues[0];
+    String secondFiledValues = matchFieldValues[1];
 
     var firstValue =
-        (firstFieldValue != null) ? form.control(firstFieldValue).value : null;
-    var secondValue = (secondFiledValues.length > 1 &&
-            form.control(secondFiledValues[0]).value != null)
-        ? form.control(secondFiledValues[0]).value.first[secondFiledValues[1]]
-        : null;
+        (firstFieldValue is String && firstFieldValue.contains('{{'))
+            ? resolveTemplateVariablesInt(firstFieldValue, form: form)
+            : form.control(firstFieldValue).value;
+    var secondValue =
+        (secondFiledValues is String && secondFiledValues.contains('{{'))
+            ? resolveTemplateVariablesInt(secondFiledValues, form: form)
+            : form.control(secondFiledValues).value;
 
     if (firstValue == null || secondValue == null) return false;
     bool isValidate = firstValue != secondValue;
