@@ -51,8 +51,7 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
   Widget build(BuildContext context) {
     final loc = FormLocalization.of(context);
 
-    String defaultApplicationIdentifier =
-        '21'; // Default to '21' for general use
+    String defaultApplicationIdentifier = '21';
 
     // Resolve template variables in validations before using them
     final resolvedValidations = _resolveValidations(validations, form);
@@ -86,6 +85,14 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
       return parsed ?? 1;
     }();
 
+    final String applicationIdentifier = () {
+      final dynamic raw = resolvedValidations
+          ?.firstWhereOrNull((v) => v.type == 'applicationIdentifier')
+          ?.value;
+      if (raw is String) return raw;
+      return raw?.toString() ?? defaultApplicationIdentifier;
+    }();
+
     // (Optional) pattern as plain string (no r'' needed)
     final String? patternString = () {
       final dynamic raw = resolvedValidations
@@ -93,14 +100,6 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
           ?.value;
       final s = raw?.toString().trim();
       return (s == null || s.isEmpty) ? null : s;
-    }();
-
-    final String applicationIdentifier = () {
-      final dynamic raw = resolvedValidations
-          ?.firstWhereOrNull((v) => v.type == 'applicationIdentifier')
-          ?.value;
-      final s = raw?.toString().trim();
-      return (s == null || s.isEmpty) ? defaultApplicationIdentifier : s;
     }();
 
     return ReactiveWrapperField(
@@ -142,12 +141,12 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
 
         final List<String> targetItems = items.map((e) {
           List<String> codes = e.split('|');
-          for (var code in codes) {
-            if (code.contains(applicationIdentifier)) {
-              return code.substring(applicationIdentifier.length + 2);
+          for (String code in codes) {
+            if (code.startsWith('($applicationIdentifier)')) {
+              return code.substring(2 + applicationIdentifier.length);
             }
           }
-          return "";
+          return e;
         }).toList();
 
         return targetItems.isNotEmpty
@@ -234,6 +233,18 @@ List<ValidationRule>? _resolveValidations(
         value,
         formValues: context,
       );
+
+      // Return new ValidationRule with resolved value
+      return ValidationRule(
+        type: rule.type,
+        value: resolvedValue,
+        message: rule.message,
+      );
+    }
+
+    if (value is String && value.contains('{')) {
+      final resolvedValue =
+          form.control(value.replaceAll('{', '').replaceAll('}', '')).value;
 
       // Return new ValidationRule with resolved value
       return ValidationRule(
