@@ -12,6 +12,7 @@ import 'package:digit_ui_components/theme/digit_extended_theme.dart';
 import 'package:digit_ui_components/widgets/atoms/input_wrapper.dart';
 import 'package:digit_ui_components/widgets/molecules/digit_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:gs1_barcode_parser/gs1_barcode_parser.dart';
@@ -399,6 +400,11 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
                                 child: DigitTextFormInput(
                                     errorMessage: field.errorText,
                                     isRequired: true,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(RegExp(
+                                        r"[a-zA-Z0-9 -]",
+                                      )),
+                                    ],
                                     onChange: (value) {
                                       form.control(_manualCodeFormKey).value =
                                           value;
@@ -423,6 +429,12 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
                                   child: DigitTextFormInput(
                                       errorMessage: field.errorText,
                                       isRequired: true,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(
+                                          r"[a-zA-Z0-9 -]",
+                                        )),
+                                      ],
                                       onChange: (value) {
                                         form
                                             .control(_manualSerialNoFormKey)
@@ -561,6 +573,11 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
                                 label: localizations.translate(
                                   i18.scanner.resourceCode,
                                 ),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp(
+                                    r"[a-zA-Z0-9 -]",
+                                  )),
+                                ],
                                 errorMessage: field.errorText,
                                 isRequired: true,
                                 type: InputType.text,
