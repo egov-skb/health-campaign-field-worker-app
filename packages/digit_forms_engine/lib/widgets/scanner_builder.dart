@@ -51,7 +51,7 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
   Widget build(BuildContext context) {
     final loc = FormLocalization.of(context);
 
-    String defaultApplicationIdentifier = '21';
+    List<String> defaultApplicationIdentifier = ['21', '01', '02', '00', '240'];
 
     // Resolve template variables in validations before using them
     final resolvedValidations = _resolveValidations(validations, form);
@@ -85,12 +85,12 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
       return parsed ?? 1;
     }();
 
-    final String applicationIdentifier = () {
+    final List applicationIdentifiers = () {
       final dynamic raw = resolvedValidations
-          ?.firstWhereOrNull((v) => v.type == 'applicationIdentifier')
+          ?.firstWhereOrNull((v) => v.type == 'applicationIdentifiers')
           ?.value;
-      if (raw is String) return raw;
-      return raw?.toString() ?? defaultApplicationIdentifier;
+      if (raw is List) return raw;
+      return raw ?? defaultApplicationIdentifier;
     }();
 
     // (Optional) pattern as plain string (no r'' needed)
@@ -100,6 +100,22 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
           ?.value;
       final s = raw?.toString().trim();
       return (s == null || s.isEmpty) ? null : s;
+    }();
+
+    final List voucherCodes = () {
+      final dynamic raw = resolvedValidations
+          ?.firstWhereOrNull((v) => v.type == 'duplicateVoucherScanValidation')
+          ?.value;
+      if (raw is List) return raw;
+      return raw ?? [];
+    }();
+
+    final List bednetCodes = () {
+      final dynamic raw = resolvedValidations
+          ?.firstWhereOrNull((v) => v.type == 'duplicateBednetScanValidation')
+          ?.value;
+      if (raw is List) return raw;
+      return raw ?? [];
     }();
 
     return ReactiveWrapperField(
@@ -115,6 +131,35 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
                 .map((b) => b.displayValue() ?? b.toString())
                 .toList(growable: false)
             : List<String>.from(state.qrCodes);
+
+        // Duplicate Validation
+        if (isGS1 == false) {
+          for (var element in items) {
+            if (voucherCodes.contains(element)) {
+              Toast.showToast(
+                context,
+                type: ToastType.error,
+                message: loc.translate(
+                  "SCANNER_DUPLICATE_CODE",
+                ),
+              );
+              return;
+            }
+          }
+        } else {
+          for (var element in items) {
+            if (bednetCodes.contains(element)) {
+              Toast.showToast(
+                context,
+                type: ToastType.error,
+                message: loc.translate(
+                  "SCANNER_DUPLICATE_CODE",
+                ),
+              );
+              return;
+            }
+          }
+        }
 
         final ctrl = form.control(formControlName);
 
@@ -142,8 +187,10 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
         final List<String> targetItems = items.map((e) {
           List<String> codes = e.split('|');
           for (String code in codes) {
-            if (code.startsWith('($applicationIdentifier)')) {
-              return code.substring(2 + applicationIdentifier.length);
+            for (String applicationIdentifier in applicationIdentifiers) {
+              if (code.startsWith('($applicationIdentifier)')) {
+                return code.substring(2 + applicationIdentifier.length);
+              }
             }
           }
           return e;

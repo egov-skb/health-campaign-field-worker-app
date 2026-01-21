@@ -57,7 +57,7 @@ class JsonSchemaNumberBuilder extends JsonSchemaBuilder<int> {
                   form.control(formControlName).value = null;
                   return;
                 }
-
+                form.control(formControlName).value = int.parse(value);
                 String? maxDependencyField = validations
                     ?.firstWhereOrNull((v) => v.type == 'maxDependencyField')
                     ?.value
@@ -83,7 +83,6 @@ class JsonSchemaNumberBuilder extends JsonSchemaBuilder<int> {
                   form.control(formControlName).setValidators(
                       [Validators.max(maxDependencyValue)],
                       autoValidate: true);
-                  form.control(formControlName).value = null;
                   Toast.showToast(
                     context,
                     type: ToastType.error,
@@ -93,7 +92,6 @@ class JsonSchemaNumberBuilder extends JsonSchemaBuilder<int> {
                     ),
                   );
                 } else {
-                  form.control(formControlName).value = int.parse(value);
                   form
                       .control(formControlName)
                       .setValidators([], autoValidate: true);
