@@ -186,8 +186,8 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
 
         final List<String> targetItems = items.map((e) {
           List<String> codes = e.split('|');
-          for (String code in codes) {
-            for (String applicationIdentifier in applicationIdentifiers) {
+          for (String applicationIdentifier in applicationIdentifiers) {
+            for (String code in codes) {
               if (code.startsWith('($applicationIdentifier)')) {
                 return code.substring(2 + applicationIdentifier.length);
               }
