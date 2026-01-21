@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
+import 'package:collection/collection.dart';
 import 'package:digit_scanner/utils/extensions/extensions.dart';
 import 'package:digit_scanner/utils/scanner_utils.dart';
 import 'package:digit_scanner/widgets/localized.dart';
@@ -66,6 +67,8 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
   static const _manualCodeFormKey = 'manualCode';
   static const _manualSerialNoFormKey = 'serialNoCode';
   static const _manualExpiryDateFormKey = 'expiryDate';
+
+  List<String> defaultApplicationIdentifier = ['21', '01', '02', '00', '240'];
 
   // ---------- pull values & messages from validations ----------
   T? _val<T>(String type) {
@@ -142,6 +145,10 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
   bool get _isGS1 => _valBool('isGS1') ?? widget.isGS1code ?? false;
   int get _scanLimit => _valInt('scanLimit') ?? widget.quantity ?? 1;
   String? get _pattern => _valString('pattern') ?? widget.regex;
+  // List<String> get _applicationIdentifier =>
+  //     _val<List<String>>('applicationIdentifiers') ??
+  //     ['21', '01', '02', '00', '240'];
+  List _applicationIdentifier = [];
 
   @override
   void initState() {
@@ -167,6 +174,14 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.digitTextTheme(context);
+
+    _applicationIdentifier = () {
+      final dynamic raw = widget.validations
+          ?.firstWhereOrNull((v) => v.type == 'applicationIdentifiers')
+          ?.value;
+      if (raw is List) return raw;
+      return raw ?? defaultApplicationIdentifier;
+    }();
 
     return Scaffold(
       body: BlocConsumer<DigitScannerBloc, DigitScannerState>(
@@ -573,13 +588,13 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
                                 label: localizations.translate(
                                   i18.scanner.resourceCode,
                                 ),
+                                errorMessage: field.errorText,
+                                isRequired: true,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(RegExp(
                                     r"[a-zA-Z0-9 -]",
                                   )),
                                 ],
-                                errorMessage: field.errorText,
-                                isRequired: true,
                                 type: InputType.text,
                                 onChange: (value) {
                                   form.control(_manualCodeFormKey).value =
@@ -862,7 +877,10 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
                                 child: Text(
                                   overflow: TextOverflow.ellipsis,
                                   _isGS1
-                                      ? (state.barCodes[index].displayValue() ??
+                                      ? (state.barCodes[index].displayValue(
+                                              prefer: _applicationIdentifier
+                                                  .map((e) => e.toString())
+                                                  .toList()) ??
                                           'Invalid GS1')
                                       : DigitScannerUtils().trimString(
                                           state.qrCodes[index].toString()),

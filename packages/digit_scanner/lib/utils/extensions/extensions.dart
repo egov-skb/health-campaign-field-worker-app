@@ -12,7 +12,7 @@ extension UniqueListItem<E> on List<E> {
 extension GS1Display on GS1Barcode {
   /// Prefer common IDs when available, else fall back to the first AI in the data.
   String? displayValue(
-      {List<String> prefer = const ['01', '02', '00', '21', '240']}) {
+      {List<String> prefer = const ['21', '01', '02', '00', '240']}) {
     for (final k in prefer) {
       final el = elements[k];
       final v = el?.data?.toString().trim();
