@@ -147,8 +147,16 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
             }
           }
         } else {
+          // GS1 Barcode validation - compare primary IDs
+          // Extract primary IDs from stored bednet codes
+          final storedPrimaryIds = (bednetCodes as List)
+              .map((code) => extractPrimaryId(code.toString()))
+              .toList();
+
           for (var element in items) {
-            if (bednetCodes.contains(element)) {
+            final scannedPrimaryId = extractPrimaryId(element);
+
+            if (storedPrimaryIds.contains(scannedPrimaryId)) {
               Toast.showToast(
                 context,
                 type: ToastType.error,
@@ -258,6 +266,28 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
       }),
     );
   }
+}
+
+/// Helper function to extract primary identifier from GS1 barcode
+/// Checks AIs in order of preference: 01, 00, 21, 10
+/// Examples:
+///   "(01)07640217811612|(21)32ABD3F11|(10)104925" -> "07640217811612"
+///   "(00)96385074629512345678" -> "96385074629512345678"
+///   "(21)ABC123|(10)LOT456" -> "ABC123"
+///   "simpleQRCode" -> "simpleQRCode"
+String extractPrimaryId(String barcode,
+    {List<String> preferredAIs = const ['01', '00', '21', '10']}) {
+  // Try to extract each preferred AI in order
+  for (final ai in preferredAIs) {
+    final aiPattern = RegExp(r'\(' + ai + r'\)([^|)]+)');
+    final aiMatch = aiPattern.firstMatch(barcode);
+    if (aiMatch != null) {
+      return aiMatch.group(1) ?? barcode;
+    }
+  }
+
+  // Return the barcode as-is if no preferred AI found
+  return barcode;
 }
 
 /// Helper function to resolve template variables in validations
