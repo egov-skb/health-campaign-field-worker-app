@@ -148,7 +148,10 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
           }
         } else {
           for (var element in items) {
-            if (bednetCodes.contains(element)) {
+            List<String> codes = element.split("|");
+            String code21 =
+                codes.firstWhereOrNull((e) => e.contains("(21)")) ?? "";
+            if (bednetCodes.contains(code21)) {
               Toast.showToast(
                 context,
                 type: ToastType.error,
