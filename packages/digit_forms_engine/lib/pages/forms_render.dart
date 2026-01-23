@@ -173,58 +173,6 @@ class _FormsRenderPageState extends LocalizedState<FormsRenderPage> {
                             schema,
                           );
 
-                          if (widget.pageName == "beneficiaryLocation") {
-                            String? accuracyString =
-                                values['latLng'].split(',')[2];
-                            double? accuracy;
-                            try {
-                              accuracy = accuracyString == null
-                                  ? null
-                                  : double.parse(accuracyString);
-                            } catch (e) {
-                              accuracy = null;
-                            }
-                            if (accuracy != null && accuracy! > 5) {
-                              bool accuracyDialogResult = await showCustomPopup(
-                                context: context,
-                                builder: (BuildContext ctx) => Popup(
-                                    title: localizations.translate(
-                                        "BENEFICIARY_LOCATION_ACCURACY_ALERT_TITLE"),
-                                    description: localizations.translate(
-                                        "BENEFICIARY_LOCATION_ACCURACY_ALERT_DESCRIPTION"),
-                                    actions: [
-                                      DigitButton(
-                                          label: localizations.translate(
-                                              "BENEFICIARY_LOCATION_ACCURACY_ALERT_PROCEED_LABEL"),
-                                          onPressed: () async {
-                                            Navigator.of(
-                                              ctx,
-                                              rootNavigator: true,
-                                            ).pop(true);
-                                          },
-                                          type: DigitButtonType.primary,
-                                          size: DigitButtonSize.large),
-                                      DigitButton(
-                                          label: localizations.translate(
-                                              "BENEFICIARY_LOCATION_ACCURACY_ALERT_CANCEL_LABEL"),
-                                          onPressed: () {
-                                            Navigator.of(
-                                              ctx,
-                                              rootNavigator: true,
-                                            ).pop(false);
-                                          },
-                                          type: DigitButtonType.secondary,
-                                          size: DigitButtonSize.large)
-                                    ]),
-                              ) as bool;
-                              if (accuracyDialogResult == false) {
-                                _isSubmitting = false;
-                                setState(() {});
-                                return;
-                              }
-                              ;
-                            }
-                          }
                           if (widget.pageName == "beneficiaryDetails") {
                             values["nameOfIndividual"] =
                                 "${values["nameOfIndividual"]} ${values["familyNameOfIndividual"]}";
