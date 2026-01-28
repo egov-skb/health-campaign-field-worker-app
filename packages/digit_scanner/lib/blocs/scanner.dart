@@ -133,6 +133,7 @@ class DigitScannerBloc extends Bloc<DigitScannerEvent, DigitScannerState> {
       if (modeIsGS1) {
         // GS1 mode
         final candidates = List<GS1Barcode>.from(event.barCode);
+        final prefer = event.prefer;
         if (candidates.isEmpty) {
           emit(state.copyWith(
               error: null, loading: false, messages: effectiveMessages));
@@ -158,13 +159,13 @@ class DigitScannerBloc extends Bloc<DigitScannerEvent, DigitScannerState> {
         }
 
         final exist = state.barCodes
-            .map((b) => b.displayValue())
+            .map((b) => b.displayValue(prefer: prefer))
             .whereType<String>()
             .toSet();
         final seenNew = <String>{};
 
         for (final b in candidates) {
-          final s = b.displayValue();
+          final s = b.displayValue(prefer: prefer);
           if (s == null || s.isEmpty) {
             await _emitError(
               emit,
@@ -331,6 +332,7 @@ class DigitScannerBloc extends Bloc<DigitScannerEvent, DigitScannerState> {
 @freezed
 class DigitScannerEvent with _$DigitScannerEvent {
   const factory DigitScannerEvent.handleScanner({
+    List<String>? prefer,
     @Default([]) List<GS1Barcode> barCode,
     @Default([]) List<String> qrCode,
     @Default('') String manualCode,
@@ -348,6 +350,7 @@ class DigitScannerEvent with _$DigitScannerEvent {
 @freezed
 class DigitScannerState with _$DigitScannerState {
   const factory DigitScannerState({
+    List<String>? prefer,
     @Default([]) List<GS1Barcode> barCodes,
     @Default([]) List<String> qrCodes,
     @Default(false) bool isGS1,

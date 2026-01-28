@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import 'package:collection/collection.dart';
+import 'package:digit_scanner/utils/constants.dart';
 import 'package:digit_scanner/utils/extensions/extensions.dart';
 import 'package:digit_scanner/utils/scanner_utils.dart';
 import 'package:digit_scanner/widgets/localized.dart';
@@ -67,8 +68,6 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
   static const _manualCodeFormKey = 'manualCode';
   static const _manualSerialNoFormKey = 'serialNoCode';
   static const _manualExpiryDateFormKey = 'expiryDate';
-
-  List<String> defaultApplicationIdentifier = ['21', '01', '02', '00', '240'];
 
   // ---------- pull values & messages from validations ----------
   T? _val<T>(String type) {
@@ -145,18 +144,24 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
   bool get _isGS1 => _valBool('isGS1') ?? widget.isGS1code ?? false;
   int get _scanLimit => _valInt('scanLimit') ?? widget.quantity ?? 1;
   String? get _pattern => _valString('pattern') ?? widget.regex;
-  // List<String> get _applicationIdentifier =>
-  //     _val<List<String>>('applicationIdentifiers') ??
-  //     ['21', '01', '02', '00', '240'];
   List _applicationIdentifier = [];
 
   @override
   void initState() {
     initializeCameras();
+    _applicationIdentifier = () {
+      final dynamic raw = widget.validations
+          ?.firstWhereOrNull((v) => v.type == 'applicationIdentifiers')
+          ?.value;
+      if (raw is List) return raw;
+      return raw ?? DigitScannerConstants.defaultApplicationIdentifier;
+    }();
+
     // Initialize bloc state with config on mount
     if (!widget.isEditEnabled) {
       context.read<DigitScannerBloc>().add(
             DigitScannerEvent.handleScanner(
+              prefer: _applicationIdentifier.map((e) => e.toString()).toList(),
               barCode: [],
               qrCode: [],
               overwrite: true,
@@ -174,14 +179,6 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.digitTextTheme(context);
-
-    _applicationIdentifier = () {
-      final dynamic raw = widget.validations
-          ?.firstWhereOrNull((v) => v.type == 'applicationIdentifiers')
-          ?.value;
-      if (raw is List) return raw;
-      return raw ?? defaultApplicationIdentifier;
-    }();
 
     return Scaffold(
       body: BlocConsumer<DigitScannerBloc, DigitScannerState>(
@@ -631,6 +628,9 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
               context
                   .read<DigitScannerBloc>()
                   .add(DigitScannerEvent.handleScanner(
+                    prefer: _applicationIdentifier
+                        .map((e) => e.toString())
+                        .toList(),
                     barCode: [],
                     qrCode: [],
                     isGS1: _isGS1,
@@ -779,6 +779,9 @@ class DigitScannerPageState extends LocalizedState<DigitScannerPage> {
                   } else {
                     final bloc = context.read<DigitScannerBloc>();
                     bloc.add(DigitScannerEvent.handleScanner(
+                      prefer: _applicationIdentifier
+                          .map((e) => e.toString())
+                          .toList(),
                       barCode: state.barCodes,
                       qrCode: state.qrCodes,
                       isGS1: _isGS1,
