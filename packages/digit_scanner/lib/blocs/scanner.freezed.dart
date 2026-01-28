@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$DigitScannerEvent {
+  List<String>? get prefer => throw _privateConstructorUsedError;
   List<GS1Barcode> get barCode => throw _privateConstructorUsedError;
   List<String> get qrCode => throw _privateConstructorUsedError;
   String get manualCode => throw _privateConstructorUsedError;
@@ -30,6 +31,7 @@ mixin _$DigitScannerEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            List<String>? prefer,
             List<GS1Barcode> barCode,
             List<String> qrCode,
             String manualCode,
@@ -44,6 +46,7 @@ mixin _$DigitScannerEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            List<String>? prefer,
             List<GS1Barcode> barCode,
             List<String> qrCode,
             String manualCode,
@@ -58,6 +61,7 @@ mixin _$DigitScannerEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            List<String>? prefer,
             List<GS1Barcode> barCode,
             List<String> qrCode,
             String manualCode,
@@ -99,7 +103,8 @@ abstract class $DigitScannerEventCopyWith<$Res> {
       _$DigitScannerEventCopyWithImpl<$Res, DigitScannerEvent>;
   @useResult
   $Res call(
-      {List<GS1Barcode> barCode,
+      {List<String>? prefer,
+      List<GS1Barcode> barCode,
       List<String> qrCode,
       String manualCode,
       bool? isGS1,
@@ -122,6 +127,7 @@ class _$DigitScannerEventCopyWithImpl<$Res, $Val extends DigitScannerEvent>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? prefer = freezed,
     Object? barCode = null,
     Object? qrCode = null,
     Object? manualCode = null,
@@ -132,6 +138,10 @@ class _$DigitScannerEventCopyWithImpl<$Res, $Val extends DigitScannerEvent>
     Object? messages = freezed,
   }) {
     return _then(_value.copyWith(
+      prefer: freezed == prefer
+          ? _value.prefer
+          : prefer // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       barCode: null == barCode
           ? _value.barCode
           : barCode // ignore: cast_nullable_to_non_nullable
@@ -178,7 +188,8 @@ abstract class _$$DigitScannerScanEventImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<GS1Barcode> barCode,
+      {List<String>? prefer,
+      List<GS1Barcode> barCode,
       List<String> qrCode,
       String manualCode,
       bool? isGS1,
@@ -199,6 +210,7 @@ class __$$DigitScannerScanEventImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? prefer = freezed,
     Object? barCode = null,
     Object? qrCode = null,
     Object? manualCode = null,
@@ -209,6 +221,10 @@ class __$$DigitScannerScanEventImplCopyWithImpl<$Res>
     Object? messages = freezed,
   }) {
     return _then(_$DigitScannerScanEventImpl(
+      prefer: freezed == prefer
+          ? _value._prefer
+          : prefer // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       barCode: null == barCode
           ? _value._barCode
           : barCode // ignore: cast_nullable_to_non_nullable
@@ -249,7 +265,8 @@ class __$$DigitScannerScanEventImplCopyWithImpl<$Res>
 
 class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
   const _$DigitScannerScanEventImpl(
-      {final List<GS1Barcode> barCode = const [],
+      {final List<String>? prefer,
+      final List<GS1Barcode> barCode = const [],
       final List<String> qrCode = const [],
       this.manualCode = '',
       this.isGS1,
@@ -257,9 +274,20 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
       this.regex,
       this.overwrite = false,
       final Map<String, String>? messages})
-      : _barCode = barCode,
+      : _prefer = prefer,
+        _barCode = barCode,
         _qrCode = qrCode,
         _messages = messages;
+
+  final List<String>? _prefer;
+  @override
+  List<String>? get prefer {
+    final value = _prefer;
+    if (value == null) return null;
+    if (_prefer is EqualUnmodifiableListView) return _prefer;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   final List<GS1Barcode> _barCode;
   @override
@@ -309,7 +337,7 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
 
   @override
   String toString() {
-    return 'DigitScannerEvent.handleScanner(barCode: $barCode, qrCode: $qrCode, manualCode: $manualCode, isGS1: $isGS1, quantity: $quantity, regex: $regex, overwrite: $overwrite, messages: $messages)';
+    return 'DigitScannerEvent.handleScanner(prefer: $prefer, barCode: $barCode, qrCode: $qrCode, manualCode: $manualCode, isGS1: $isGS1, quantity: $quantity, regex: $regex, overwrite: $overwrite, messages: $messages)';
   }
 
   @override
@@ -317,6 +345,7 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DigitScannerScanEventImpl &&
+            const DeepCollectionEquality().equals(other._prefer, _prefer) &&
             const DeepCollectionEquality().equals(other._barCode, _barCode) &&
             const DeepCollectionEquality().equals(other._qrCode, _qrCode) &&
             (identical(other.manualCode, manualCode) ||
@@ -333,6 +362,7 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(_prefer),
       const DeepCollectionEquality().hash(_barCode),
       const DeepCollectionEquality().hash(_qrCode),
       manualCode,
@@ -353,6 +383,7 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            List<String>? prefer,
             List<GS1Barcode> barCode,
             List<String> qrCode,
             String manualCode,
@@ -363,14 +394,15 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
             Map<String, String>? messages)
         handleScanner,
   }) {
-    return handleScanner(barCode, qrCode, manualCode, isGS1, quantity, regex,
-        overwrite, messages);
+    return handleScanner(prefer, barCode, qrCode, manualCode, isGS1, quantity,
+        regex, overwrite, messages);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            List<String>? prefer,
             List<GS1Barcode> barCode,
             List<String> qrCode,
             String manualCode,
@@ -381,14 +413,15 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
             Map<String, String>? messages)?
         handleScanner,
   }) {
-    return handleScanner?.call(barCode, qrCode, manualCode, isGS1, quantity,
-        regex, overwrite, messages);
+    return handleScanner?.call(prefer, barCode, qrCode, manualCode, isGS1,
+        quantity, regex, overwrite, messages);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            List<String>? prefer,
             List<GS1Barcode> barCode,
             List<String> qrCode,
             String manualCode,
@@ -401,8 +434,8 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
     required TResult orElse(),
   }) {
     if (handleScanner != null) {
-      return handleScanner(barCode, qrCode, manualCode, isGS1, quantity, regex,
-          overwrite, messages);
+      return handleScanner(prefer, barCode, qrCode, manualCode, isGS1, quantity,
+          regex, overwrite, messages);
     }
     return orElse();
   }
@@ -438,7 +471,8 @@ class _$DigitScannerScanEventImpl implements DigitScannerScanEvent {
 
 abstract class DigitScannerScanEvent implements DigitScannerEvent {
   const factory DigitScannerScanEvent(
-      {final List<GS1Barcode> barCode,
+      {final List<String>? prefer,
+      final List<GS1Barcode> barCode,
       final List<String> qrCode,
       final String manualCode,
       final bool? isGS1,
@@ -447,6 +481,8 @@ abstract class DigitScannerScanEvent implements DigitScannerEvent {
       final bool overwrite,
       final Map<String, String>? messages}) = _$DigitScannerScanEventImpl;
 
+  @override
+  List<String>? get prefer;
   @override
   List<GS1Barcode> get barCode;
   @override
@@ -474,6 +510,7 @@ abstract class DigitScannerScanEvent implements DigitScannerEvent {
 
 /// @nodoc
 mixin _$DigitScannerState {
+  List<String>? get prefer => throw _privateConstructorUsedError;
   List<GS1Barcode> get barCodes => throw _privateConstructorUsedError;
   List<String> get qrCodes => throw _privateConstructorUsedError;
   bool get isGS1 => throw _privateConstructorUsedError;
@@ -501,7 +538,8 @@ abstract class $DigitScannerStateCopyWith<$Res> {
       _$DigitScannerStateCopyWithImpl<$Res, DigitScannerState>;
   @useResult
   $Res call(
-      {List<GS1Barcode> barCodes,
+      {List<String>? prefer,
+      List<GS1Barcode> barCodes,
       List<String> qrCodes,
       bool isGS1,
       int quantity,
@@ -526,6 +564,7 @@ class _$DigitScannerStateCopyWithImpl<$Res, $Val extends DigitScannerState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? prefer = freezed,
     Object? barCodes = null,
     Object? qrCodes = null,
     Object? isGS1 = null,
@@ -538,6 +577,10 @@ class _$DigitScannerStateCopyWithImpl<$Res, $Val extends DigitScannerState>
     Object? errorSeq = null,
   }) {
     return _then(_value.copyWith(
+      prefer: freezed == prefer
+          ? _value.prefer
+          : prefer // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       barCodes: null == barCodes
           ? _value.barCodes
           : barCodes // ignore: cast_nullable_to_non_nullable
@@ -591,7 +634,8 @@ abstract class _$$DigitScannerStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<GS1Barcode> barCodes,
+      {List<String>? prefer,
+      List<GS1Barcode> barCodes,
       List<String> qrCodes,
       bool isGS1,
       int quantity,
@@ -614,6 +658,7 @@ class __$$DigitScannerStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? prefer = freezed,
     Object? barCodes = null,
     Object? qrCodes = null,
     Object? isGS1 = null,
@@ -626,6 +671,10 @@ class __$$DigitScannerStateImplCopyWithImpl<$Res>
     Object? errorSeq = null,
   }) {
     return _then(_$DigitScannerStateImpl(
+      prefer: freezed == prefer
+          ? _value._prefer
+          : prefer // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       barCodes: null == barCodes
           ? _value._barCodes
           : barCodes // ignore: cast_nullable_to_non_nullable
@@ -674,7 +723,8 @@ class __$$DigitScannerStateImplCopyWithImpl<$Res>
 
 class _$DigitScannerStateImpl implements _DigitScannerState {
   const _$DigitScannerStateImpl(
-      {final List<GS1Barcode> barCodes = const [],
+      {final List<String>? prefer,
+      final List<GS1Barcode> barCodes = const [],
       final List<String> qrCodes = const [],
       this.isGS1 = false,
       this.quantity = 1,
@@ -684,9 +734,20 @@ class _$DigitScannerStateImpl implements _DigitScannerState {
       this.error,
       final Map<String, String> messages = const {},
       this.errorSeq = 0})
-      : _barCodes = barCodes,
+      : _prefer = prefer,
+        _barCodes = barCodes,
         _qrCodes = qrCodes,
         _messages = messages;
+
+  final List<String>? _prefer;
+  @override
+  List<String>? get prefer {
+    final value = _prefer;
+    if (value == null) return null;
+    if (_prefer is EqualUnmodifiableListView) return _prefer;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   final List<GS1Barcode> _barCodes;
   @override
@@ -742,7 +803,7 @@ class _$DigitScannerStateImpl implements _DigitScannerState {
 
   @override
   String toString() {
-    return 'DigitScannerState(barCodes: $barCodes, qrCodes: $qrCodes, isGS1: $isGS1, quantity: $quantity, regex: $regex, loading: $loading, duplicate: $duplicate, error: $error, messages: $messages, errorSeq: $errorSeq)';
+    return 'DigitScannerState(prefer: $prefer, barCodes: $barCodes, qrCodes: $qrCodes, isGS1: $isGS1, quantity: $quantity, regex: $regex, loading: $loading, duplicate: $duplicate, error: $error, messages: $messages, errorSeq: $errorSeq)';
   }
 
   @override
@@ -750,6 +811,7 @@ class _$DigitScannerStateImpl implements _DigitScannerState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DigitScannerStateImpl &&
+            const DeepCollectionEquality().equals(other._prefer, _prefer) &&
             const DeepCollectionEquality().equals(other._barCodes, _barCodes) &&
             const DeepCollectionEquality().equals(other._qrCodes, _qrCodes) &&
             (identical(other.isGS1, isGS1) || other.isGS1 == isGS1) &&
@@ -768,6 +830,7 @@ class _$DigitScannerStateImpl implements _DigitScannerState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(_prefer),
       const DeepCollectionEquality().hash(_barCodes),
       const DeepCollectionEquality().hash(_qrCodes),
       isGS1,
@@ -789,7 +852,8 @@ class _$DigitScannerStateImpl implements _DigitScannerState {
 
 abstract class _DigitScannerState implements DigitScannerState {
   const factory _DigitScannerState(
-      {final List<GS1Barcode> barCodes,
+      {final List<String>? prefer,
+      final List<GS1Barcode> barCodes,
       final List<String> qrCodes,
       final bool isGS1,
       final int quantity,
@@ -800,6 +864,8 @@ abstract class _DigitScannerState implements DigitScannerState {
       final Map<String, String> messages,
       final int errorSeq}) = _$DigitScannerStateImpl;
 
+  @override
+  List<String>? get prefer;
   @override
   List<GS1Barcode> get barCodes;
   @override

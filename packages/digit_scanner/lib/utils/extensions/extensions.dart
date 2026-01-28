@@ -1,4 +1,5 @@
 // Extension to remove duplicates from a list based on a provided constraint.
+import 'package:digit_scanner/utils/constants.dart';
 import 'package:gs1_barcode_parser/gs1_barcode_parser.dart';
 
 extension UniqueListItem<E> on List<E> {
@@ -11,8 +12,10 @@ extension UniqueListItem<E> on List<E> {
 
 extension GS1Display on GS1Barcode {
   /// Prefer common IDs when available, else fall back to the first AI in the data.
-  String? displayValue(
-      {List<String> prefer = const ['01', '02', '00', '21', '240']}) {
+  String? displayValue({List<String>? prefer}) {
+    if (prefer == null || prefer.isEmpty) {
+      prefer = DigitScannerConstants.defaultApplicationIdentifier;
+    }
     for (final k in prefer) {
       final el = elements[k];
       final v = el?.data?.toString().trim();
