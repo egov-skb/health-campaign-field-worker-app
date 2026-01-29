@@ -149,8 +149,11 @@ class JsonSchemaScannerBuilder extends JsonSchemaBuilder<String> {
         } else {
           for (var element in items) {
             List<String> codes = element.split("|");
+            String targetedApplicationIdentifier = bednetCodes.isEmpty
+                ? "(${applicationIdentifiers.first})"
+                : "${bednetCodes.first.split(")").first})";
             String targetedCode = codes.firstWhereOrNull(
-                    (e) => e.contains("${applicationIdentifiers.first}")) ??
+                    (e) => e.contains(targetedApplicationIdentifier)) ??
                 "";
             if (bednetCodes.contains(targetedCode)) {
               Toast.showToast(
