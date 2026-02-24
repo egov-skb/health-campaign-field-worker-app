@@ -1,4 +1,5 @@
 import 'package:digit_ui_components/digit_components.dart';
+import 'package:digit_ui_components/theme/ComponentTheme/button_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../action_handler/action_config.dart';
@@ -75,14 +76,19 @@ class ButtonWidget implements FlowWidget {
           labelText;
     }
 
+    Map<String, Color> colorMap = {'green': Colors.green};
+
     return WidgetParsers.wrapWithBottomGap(
       DigitButton(
         crossAxisAlignment: CrossAxisAlignment.center,
         label: resolvedLabel,
         isDisabled: isDisabled,
+        iconColor: colorMap[props["color"]],
+        textColor: colorMap[props["color"]],
         onPressed: () async {
           if (json['onAction'] != null) {
-            final actionsList = List<Map<String, dynamic>>.from(json['onAction']);
+            final actionsList =
+                List<Map<String, dynamic>>.from(json['onAction']);
 
             // Read current data from registry at click time
             // flowState data is captured at widget build time and may be stale
@@ -90,8 +96,10 @@ class ButtonWidget implements FlowWidget {
             final registryState = compositeKey != null
                 ? FlowCrudStateRegistry().get(compositeKey)
                 : null;
-            final currentWidgetData = registryState?.widgetData ?? flowState.widgetData;
-            final currentFormData = registryState?.formData ?? flowState.formData;
+            final currentWidgetData =
+                registryState?.widgetData ?? flowState.widgetData;
+            final currentFormData =
+                registryState?.formData ?? flowState.formData;
 
             // Build evalContext with latest widgetData and formData
             final currentEvalContext = <String, dynamic>{
@@ -103,7 +111,8 @@ class ButtonWidget implements FlowWidget {
             };
 
             // Helper function to resolve navigation data for an action
-            Map<String, dynamic> resolveNavDataForAction(Map<String, dynamic> actionJson) {
+            Map<String, dynamic> resolveNavDataForAction(
+                Map<String, dynamic> actionJson) {
               var action = ActionConfig.fromJson(actionJson);
               final navData = action.properties['data'] as List<dynamic>?;
 
@@ -112,10 +121,11 @@ class ButtonWidget implements FlowWidget {
                   final rawValue = entry['value'];
 
                   // Try to resolve from evalContext first, then widgetData, then formData
-                  dynamic resolvedValue = resolveValue(rawValue, currentEvalContext)
-                      ?? rawValue;
+                  dynamic resolvedValue =
+                      resolveValue(rawValue, currentEvalContext) ?? rawValue;
 
-                  if (resolvedValue == rawValue && currentWidgetData.isNotEmpty) {
+                  if (resolvedValue == rawValue &&
+                      currentWidgetData.isNotEmpty) {
                     // If not resolved from evalContext, try widgetData
                     resolvedValue = resolveValue(rawValue, currentWidgetData);
                   }
@@ -126,7 +136,8 @@ class ButtonWidget implements FlowWidget {
                   }
 
                   return {
-                    ...Map<String, dynamic>.from(entry), // Keep all original fields (operation, root, etc.)
+                    ...Map<String, dynamic>.from(
+                        entry), // Keep all original fields (operation, root, etc.)
                     "value": resolvedValue ?? rawValue,
                   };
                 }).toList();
@@ -149,12 +160,16 @@ class ButtonWidget implements FlowWidget {
 
               // Resolve condition expression if present
               if (actionJson['condition'] != null) {
-                final condition = Map<String, dynamic>.from(actionJson['condition']);
+                final condition =
+                    Map<String, dynamic>.from(actionJson['condition']);
                 final expression = condition['expression'] as String?;
                 if (expression != null && expression.contains('{{')) {
                   // Resolve the expression template using current registry data
-                  String resolvedExpression = resolveTemplate(expression, currentEvalContext) ?? expression;
-                  if (resolvedExpression == expression && crudStateData != null) {
+                  String resolvedExpression =
+                      resolveTemplate(expression, currentEvalContext) ??
+                          expression;
+                  if (resolvedExpression == expression &&
+                      crudStateData != null) {
                     resolvedExpression = resolveValueRaw(
                       expression,
                       currentEvalContext,
@@ -167,14 +182,17 @@ class ButtonWidget implements FlowWidget {
 
               // Check if this is a conditional action with nested actions array
               if (actionJson['actions'] != null) {
-                final nestedActions = List<Map<String, dynamic>>.from(actionJson['actions']);
+                final nestedActions =
+                    List<Map<String, dynamic>>.from(actionJson['actions']);
                 final resolvedNestedActions = nestedActions.map((nestedAction) {
-                  return resolveNavDataForAction(Map<String, dynamic>.from(nestedAction));
+                  return resolveNavDataForAction(
+                      Map<String, dynamic>.from(nestedAction));
                 }).toList();
                 resolvedActionJson['actions'] = resolvedNestedActions;
               } else {
                 // Resolve navigation data for top-level action
-                resolvedActionJson = resolveNavDataForAction(resolvedActionJson);
+                resolvedActionJson =
+                    resolveNavDataForAction(resolvedActionJson);
               }
 
               return resolvedActionJson;
@@ -184,7 +202,8 @@ class ButtonWidget implements FlowWidget {
             // Also include navigation params from registry for condition evaluation
             final screenKey = flowState.screenKey;
             final navigationParams = screenKey != null
-                ? FlowCrudStateRegistry().getNavigationParams(compositeKey ?? screenKey) ??
+                ? FlowCrudStateRegistry()
+                        .getNavigationParams(compositeKey ?? screenKey) ??
                     FlowCrudStateRegistry()
                         .getNavigationParams(screenKey.split('::').last) ??
                     {}

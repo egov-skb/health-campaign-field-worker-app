@@ -41,6 +41,7 @@ import '../data/local_store/no_sql/schema/service_registry.dart';
 import '../data/local_store/secure_store/secure_store.dart';
 import '../models/entities/roles_type.dart';
 import '../router/app_router.dart';
+import '../sampleJsonConfigs/attendance.dart';
 import '../sampleJsonConfigs/closed_household.dart';
 import '../sampleJsonConfigs/complaints.dart';
 import '../sampleJsonConfigs/hf_referral.dart';
@@ -1316,13 +1317,20 @@ class _HomePageState extends LocalizedState<HomePage> {
         child: HomeItemCard(
           icon: Icons.fingerprint_outlined,
           label: i18.home.manageAttendanceLabel,
-          onPressed: () {
+          onPressed: () async {
             // if (isTriggerLocalisation) {
             const module = "hcm-attendance";
             triggerLocalization(module: module);
             isTriggerLocalisation = false;
             // };
-            context.router.push(const ManageAttendanceRoute());
+            // context.router.push(const ManageAttendanceRoute());
+            await FlowNavigationUtils.navigateToFlowModule(
+              context: context,
+              config: FlowModuleConfig(
+                schemaKey: 'ATTENDANCE',
+                sampleFlows: attendanceFlows,
+              ),
+            );
           },
         ),
       ),
@@ -1455,7 +1463,8 @@ class _HomePageState extends LocalizedState<HomePage> {
                 .map((e) => e.displayName)
                 .toList()
                 .contains(element) ||
-            element == i18.home.db)
+            element == i18.home.db ||
+            element == i18.home.manageAttendanceLabel)
         .toList();
 
     final showcaseKeys = filteredLabels

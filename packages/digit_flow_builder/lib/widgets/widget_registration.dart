@@ -1,7 +1,10 @@
 import 'package:digit_flow_builder/widgets/implementations/action_popup_widget.dart';
 import 'package:digit_flow_builder/widgets/implementations/back_link.dart';
 import 'package:digit_flow_builder/widgets/implementations/expandable_widget.dart';
+import 'package:digit_flow_builder/widgets/implementations/expanded_widget.dart';
+import 'package:digit_flow_builder/widgets/implementations/icon_button_widget.dart';
 import 'package:digit_flow_builder/widgets/implementations/proximitySearch_widget.dart';
+import 'package:digit_flow_builder/widgets/implementations/sized_box_widget.dart';
 
 import 'flow_widget_interface.dart';
 import 'implementations/button_widget.dart';
@@ -26,6 +29,7 @@ import 'implementations/table_widget.dart';
 import 'implementations/tag_widget.dart';
 import 'implementations/text_input_widget.dart';
 import 'implementations/text_widget.dart';
+import 'implementations/date_row_picker_widget.dart';
 
 /// Registers all available flow widgets
 class WidgetRegistration {
@@ -63,7 +67,10 @@ class WidgetRegistration {
     FlowWidgetFactory.register(ActionPopupWidget());
     FlowWidgetFactory.register(ProximitySearchWidget());
     FlowWidgetFactory.register(ExpandableWidget());
-
+    FlowWidgetFactory.register(ExpandedWidget());
+    FlowWidgetFactory.register(SizedBoxWidget());
+    FlowWidgetFactory.register(IconsButtonWidget());
+    FlowWidgetFactory.register(DateRowPickerWidget());
     _initialized = true;
   }
 
