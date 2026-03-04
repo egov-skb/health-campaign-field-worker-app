@@ -283,9 +283,11 @@ class BeneficiaryRegistrationBloc
               var id = await uniqueIdPoolLocalRepository
                   .search(UniqueIdPoolSearchModel(id: uniqueId.identifierId!));
 
-              uniqueIdPoolLocalRepository.update(id.firstOrNull!.copyWith(
-                status: IdStatus.assigned.toValue(),
-              ));
+              if (id.isNotEmpty) {
+                uniqueIdPoolLocalRepository.update(id.firstOrNull!.copyWith(
+                  status: IdStatus.assigned.toValue(),
+                ));
+              }
             }
 
             await projectBeneficiaryRepository.create(
@@ -645,10 +647,11 @@ class BeneficiaryRegistrationBloc
           if (uniqueId != null) {
             var id = await uniqueIdPoolLocalRepository
                 .search(UniqueIdPoolSearchModel(id: uniqueId.identifierId!));
-
-            uniqueIdPoolLocalRepository.update(id.firstOrNull!.copyWith(
-              status: IdStatus.assigned.toValue(),
-            ));
+            if (id.isNotEmpty) {
+              uniqueIdPoolLocalRepository.update(id.firstOrNull!.copyWith(
+                status: IdStatus.assigned.toValue(),
+              ));
+            }
           }
 
           if (projectBeneficiary.isNotEmpty) {
@@ -726,10 +729,11 @@ class BeneficiaryRegistrationBloc
           if (uniqueId != null) {
             var id = await uniqueIdPoolLocalRepository
                 .search(UniqueIdPoolSearchModel(id: uniqueId.identifierId!));
-
-            uniqueIdPoolLocalRepository.update(id.firstOrNull!.copyWith(
-              status: IdStatus.assigned.toValue(),
-            ));
+            if (id.isNotEmpty) {
+              uniqueIdPoolLocalRepository.update(id.firstOrNull!.copyWith(
+                status: IdStatus.assigned.toValue(),
+              ));
+            }
           }
 
           if (event.beneficiaryType == BeneficiaryType.individual) {
