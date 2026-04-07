@@ -97,6 +97,12 @@ class JsonSchemaNumberBuilder extends JsonSchemaBuilder<int> {
                       .setValidators([], autoValidate: true);
                 }
                 form.control(formControlName).markAsTouched();
+                if (getMinValue(validations) != null &&
+                    int.parse(value) < getMinValue(validations)!) {
+                  form.control(formControlName).setErrors({'minValue': true});
+                } else {
+                  form.control(formControlName).removeError('minValue');
+                }
                 if (getMinLength(validations) != null &&
                     value.length < getMinLength(validations)!) {
                   form.control(formControlName).setErrors({'minLength': true});
