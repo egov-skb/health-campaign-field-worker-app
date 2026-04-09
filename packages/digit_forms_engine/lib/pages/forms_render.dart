@@ -147,6 +147,19 @@ class _FormsRenderPageState extends LocalizedState<FormsRenderPage> {
 
                           final hasErrors = currentKeys.any((key) {
                             final control = formGroup.control(key);
+                            if (widget.pageName == "beneficiaryDetails" &&
+                                key == "tag") {
+                              if (control.errors.isNotEmpty &&
+                                  control.errors.containsKey("required")) {
+                                Toast.showToast(
+                                  context,
+                                  type: ToastType.error,
+                                  message:
+                                      "${localizations.translate("SCANNED_TAG_REQUIRED")}",
+                                );
+                                return true;
+                              }
+                            }
                             return control.errors.isNotEmpty;
                           });
 
