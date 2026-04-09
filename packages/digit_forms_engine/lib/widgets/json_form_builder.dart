@@ -85,6 +85,56 @@ class _JsonFormBuilderState extends LocalizedState<JsonFormBuilder> {
     }
   }
 
+  int? resolveTemplateVariablesInt(String firstFieldValue,
+      {required FormGroup form}) {
+    // Build context from current form values
+    final formContext = _buildFormContext(form);
+    String? resolveValue = resolveTemplateVariables(
+      firstFieldValue,
+      formValues: formContext,
+    );
+    if (resolveValue == null) return null;
+    return int.tryParse(resolveValue);
+  }
+
+  bool hasMatchValueValidation(
+      FormGroup form, List<ValidationRule>? validations) {
+    if (validations == null) return false;
+
+    List matchFieldValues = validations
+        .firstWhereOrNull((rule) => rule.type == 'matchValue')
+        ?.value;
+
+    if (matchFieldValues == null) return false;
+
+    if (matchFieldValues.length < 2) return false;
+
+    String firstFieldValue = matchFieldValues[0];
+    String secondFiledValues = matchFieldValues[1];
+
+    var firstValue =
+        (firstFieldValue is String && firstFieldValue.contains('{{'))
+            ? resolveTemplateVariablesInt(firstFieldValue, form: form)
+            : form.control(firstFieldValue).value;
+    var secondValue =
+        (secondFiledValues is String && secondFiledValues.contains('{{'))
+            ? resolveTemplateVariablesInt(secondFiledValues, form: form)
+            : form.control(secondFiledValues).value;
+
+    if (firstValue == null || secondValue == null) return false;
+    bool isValidate = firstValue != secondValue;
+    if (isValidate) {
+      form
+          .control(widget.formControlName)
+          .setValidators([Validators.required], autoValidate: true);
+    } else {
+      form
+          .control(widget.formControlName)
+          .setValidators([], autoValidate: true);
+    }
+    return isValidate;
+  }
+
   /// Handle `string` type formats
   Widget _buildStringType(FormGroup form) {
     final format = widget.schema.format;
@@ -121,7 +171,8 @@ class _JsonFormBuilderState extends LocalizedState<JsonFormBuilder> {
       case PropertySchemaFormat.dropdown:
         return JsonSchemaDropdownBuilder(
           tooltipText: translateIfPresent(widget.schema.tooltip, localizations),
-          isRequired: hasRequiredValidation(widget.schema.validations),
+          isRequired: hasRequiredValidation(widget.schema.validations) ||
+              hasMatchValueValidation(form, widget.schema.validations),
           label: translateIfPresent(widget.schema.label, localizations),
           form: form,
           formControlName: widget.formControlName,

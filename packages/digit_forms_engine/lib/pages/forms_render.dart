@@ -147,6 +147,19 @@ class _FormsRenderPageState extends LocalizedState<FormsRenderPage> {
 
                           final hasErrors = currentKeys.any((key) {
                             final control = formGroup.control(key);
+                            if (widget.pageName == "beneficiaryDetails" &&
+                                key == "tag") {
+                              if (control.errors.isNotEmpty &&
+                                  control.errors.containsKey("required")) {
+                                Toast.showToast(
+                                  context,
+                                  type: ToastType.error,
+                                  message:
+                                      "${localizations.translate("SCANNED_TAG_REQUIRED")}",
+                                );
+                                return true;
+                              }
+                            }
                             return control.errors.isNotEmpty;
                           });
 
@@ -172,6 +185,54 @@ class _FormsRenderPageState extends LocalizedState<FormsRenderPage> {
                             formGroup,
                             schema,
                           );
+
+                          if (widget.pageName == "beneficiaryDetails") {
+                            values["nameOfIndividual"] =
+                                "${values["nameOfIndividual"]} ${values["familyNameOfIndividual"]}";
+                          }
+                          if (widget.pageName == "DeliveryDetails") {
+                            values["resourceCard"] = {
+                              "resourceDelivered": values["resourceCard"]
+                                  .first["resourceDelivered"],
+                              "quantityDistributed":
+                                  values["actualQuantityDelivered"]
+                            };
+                            int numberOfBalesScanned = 0;
+                            var scanner = values["scanner"];
+                            if (scanner != null) {
+                              List<String> balesScanned = scanner.split(',');
+                              numberOfBalesScanned = balesScanned.length;
+                            }
+                            if (numberOfBalesScanned <
+                                values["actualQuantityDelivered"]) {
+                              // Show error if number of scanned bales is less than actual quantity delivered
+                              showCustomPopup(
+                                context: context,
+                                builder: (BuildContext ctx) => Popup(
+                                    title: localizations.translate(
+                                        "DELIVERY_DETAILS_SCANNER_QUANTITY_ERROR_TITLE"),
+                                    description: localizations.translate(
+                                        "DELIVERY_DETAILS_SCANNER_QUANTITY_ERROR_DESCRIPTION"),
+                                    actions: [
+                                      DigitButton(
+                                        label: localizations
+                                            .translate("CORE_COMMON_OK"),
+                                        onPressed: () async {
+                                          Navigator.of(
+                                            ctx,
+                                            rootNavigator: true,
+                                          ).pop();
+                                        },
+                                        type: DigitButtonType.primary,
+                                        size: DigitButtonSize.large,
+                                      ),
+                                    ]),
+                              );
+                              _isSubmitting = false;
+                              setState(() {});
+                              return;
+                            }
+                          }
 
                           final updatedPropertySchema = schema.copyWith(
                             properties: Map.fromEntries(
