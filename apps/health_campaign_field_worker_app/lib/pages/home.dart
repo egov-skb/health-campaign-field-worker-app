@@ -1696,8 +1696,12 @@ class _HomePageState extends LocalizedState<HomePage> {
       return Container();
     }
     final isPolio =
-        context.selectedProject.projectType?.toUpperCase().contains('POLIO') ==
-            true;
+        (context.selectedProject.projectType?.toUpperCase().contains("POLIO") ==
+                true) ||
+            (context.selectedProject.projectType
+                    ?.toUpperCase()
+                    .contains("IMMUNISATION") ==
+                true);
     final roles = state.userModel.roles.map((e) {
       return e.code;
     });
@@ -2251,8 +2255,12 @@ class _HomePageState extends LocalizedState<HomePage> {
     }
 
     final isPolio =
-        context.selectedProject.projectType?.toUpperCase().contains('POLIO') ==
-            true;
+        (context.selectedProject.projectType?.toUpperCase().contains("POLIO") ==
+                true) ||
+            (context.selectedProject.projectType
+                    ?.toUpperCase()
+                    .contains("IMMUNISATION") ==
+                true);
 
     final Map<String, Widget> homeItemsMap = {
       // INFO : Need to add home items of package Here
