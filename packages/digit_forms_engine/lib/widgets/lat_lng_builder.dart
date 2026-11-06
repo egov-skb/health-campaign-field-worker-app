@@ -728,15 +728,46 @@ class _LatLngBuilderStatefulWrapperState
                       // countdown can follow it. Same side padding and full
                       // width as the other popups' primary button.
                       const SizedBox(height: spacer4),
-                      DigitButton(
-                        label: _t(loc, 'LOCATION_SAVE_POINT', 'Save'),
-                        isDisabled: !canSave,
-                        onPressed: _acceptCurrentReading,
-                        type: DigitButtonType.primary,
-                        size: DigitButtonSize.large,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),
+                      if (kDebugMode)
+                        // Debug builds only: Skip saves the current reading
+                        // without waiting for good accuracy or the timer.
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DigitButton(
+                                label: 'Skip',
+                                isDisabled: !progress.hasReading,
+                                onPressed: _acceptCurrentReading,
+                                type: DigitButtonType.secondary,
+                                size: DigitButtonSize.large,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                              ),
+                            ),
+                            const SizedBox(width: spacer4),
+                            Expanded(
+                              child: DigitButton(
+                                label: _t(loc, 'LOCATION_SAVE_POINT', 'Save'),
+                                isDisabled: !canSave,
+                                onPressed: _acceptCurrentReading,
+                                type: DigitButtonType.primary,
+                                size: DigitButtonSize.large,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        DigitButton(
+                          label: _t(loc, 'LOCATION_SAVE_POINT', 'Save'),
+                          isDisabled: !canSave,
+                          onPressed: _acceptCurrentReading,
+                          type: DigitButtonType.primary,
+                          size: DigitButtonSize.large,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
                       // "Save will be enabled in …" countdown below the Save button: hidden.
                       // if (saveTimerLeft != null && saveTimerLeft > 0) ...[
                       //   const SizedBox(height: spacer2),
